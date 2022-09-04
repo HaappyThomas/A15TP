@@ -31,6 +31,4 @@ public class ConnectionAlwaysData {
 		return connect;
 	}
 	
-	
-	
 }
