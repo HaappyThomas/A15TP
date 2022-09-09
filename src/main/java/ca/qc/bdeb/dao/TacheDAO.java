@@ -22,14 +22,14 @@ public class TacheDAO implements ITacheDAO {
 	Connection con = connection.getInstance();
 	
 	//Une méthode pour retourner une tâche après son ajout dans la base de données
-	//(les données d’une tâche sont des paramètres de cette méthode)
-     
-
+	//(les données d’une tâche sont des paramètres de cette méthode) 
 	@Override
 	public Tache ajouter(Tache tache) throws SQLException {
+		
+		
 		ps = con.prepareStatement(ISQLConstant.INSERT_TACHE);
 		ps.setString(1, tache.getDescription());
-		//ps.set(2, tache.getDatetime());
+		ps.setString(2, tache.getDatetime().toString());
 		ps.setInt(3, tache.getDuree());
 		ps.setInt(4, tache.getUtilisateurId());
 
