@@ -63,7 +63,7 @@ public class Tache {
 	@Override
 	public String toString() {
 		return "Tache [tacheId=" + tacheId + ", description=" + description + ", datetime=" + datetime + ", duree="
-				+ duree + ", utilisateurId=" + utilisateurId + "]";
+				+ duree + ", utilisateurId=" + utilisateurId + "]" + "\n";
 	}
 	
 	

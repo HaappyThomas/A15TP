@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.qc.bdeb.models.Tache;
@@ -11,6 +13,18 @@ import ca.qc.bdeb.models.Utilisateur;
 
 public class ConnectionAlwaysDataTest {
 
+	// todo 标准做法 加入测试数据，测试结束删除数据，保证数据库中没有残留数据
+	
+	@BeforeEach
+	void setUp() {
+		// todo: ajouter test data
+	}
+	
+	@AfterEach
+	void tearDown() {
+		// todo: delete test data
+	}
+	
 	@Test
 	public void connectTableUtilisateurTest() {
 		Connection connection = ConnectionAlwaysData.getInstance();
@@ -29,6 +43,7 @@ public class ConnectionAlwaysDataTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		// todo 比较预期结果和真实的返回结果
 	}
 
 	@Test
@@ -55,5 +70,6 @@ public class ConnectionAlwaysDataTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		// todo 比较预期结果和真实的返回结果
 	}
 }

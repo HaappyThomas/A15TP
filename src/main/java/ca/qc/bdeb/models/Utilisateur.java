@@ -32,7 +32,7 @@ public class Utilisateur {
 
 	@Override
 	public String toString() {
-		return "Utilisateur [utilisateurId=" + utilisateurId + ", nomComplet=" + nomComplet + "]";
+		return "Utilisateur [utilisateurId=" + utilisateurId + ", nomComplet=" + nomComplet + "]" + "\n";
 	}
 	
 	
