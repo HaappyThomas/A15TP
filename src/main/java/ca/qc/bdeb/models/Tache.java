@@ -11,6 +11,14 @@ public class Tache {
 	
 	public Tache() {
 	}
+	
+	public Tache(String description, LocalDate datetime, int duree, int utilisateurId) {
+		this.description = description;
+		this.datetime = datetime;
+		this.duree = duree;
+		this.utilisateurId = utilisateurId;
+	}
+
 
 	public Tache(int tacheId, String description, LocalDate datetime, int duree, int utilisateurId) {
 		this.tacheId = tacheId;

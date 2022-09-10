@@ -8,8 +8,11 @@ public class Utilisateur {
 		super();
 	}
 
+	public Utilisateur(String nomComplet) {
+		this.nomComplet = nomComplet;
+	}
+	
 	public Utilisateur(int utilisateurId, String nomComplet) {
-		super();
 		this.utilisateurId = utilisateurId;
 		this.nomComplet = nomComplet;
 	}

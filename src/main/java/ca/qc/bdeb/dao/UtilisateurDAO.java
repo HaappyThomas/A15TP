@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.qc.bdeb.models.Utilisateur;
 
 public class UtilisateurDAO implements IUtilisateurDAO {
-	private Utilisateur utilisateur;
 	private PreparedStatement ps = null;
+	private ResultSet rs = null;
 
 	// Connexion a la BDD
 	Connection con = ConnectionAlwaysData.getInstance();
@@ -21,18 +22,21 @@ public class UtilisateurDAO implements IUtilisateurDAO {
 	@Override
 	public Utilisateur ajouter(String nomComplet) {
 
+		Utilisateur utilisateur = new Utilisateur();
 		try {
-			ps = con.prepareStatement(ISQLConstant.INSERT_UTILISATEUR);
+			ps = con.prepareStatement(ISQLConstant.INSERT_UTILISATEUR, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, nomComplet);
 
 			int nbr = ps.executeUpdate();
-			Utilisateur utilisateur = new Utilisateur();
+			// recuperer utilisateurId generé automatiquement par DB
+			rs = ps.getGeneratedKeys();
 			if (nbr > 0) {
 				System.out.println("L'utilisateur a été inseré");
-				ResultSet rs = ps.executeQuery("SELECT * FROM TbL_Utilisateur WHERE NomComplet = " + nomComplet);
-				utilisateur = new Utilisateur();
+				// positionner rs cursor à premere ligne
+				rs.next();
+				// set utilisateurId
 				utilisateur.setUtilisateurId(rs.getInt(1));
-				utilisateur.setNomComplet(rs.getString(2));
+				utilisateur.setNomComplet(nomComplet);
 
 			} else {
 				System.out.println("Operation echouée");
@@ -49,12 +53,12 @@ public class UtilisateurDAO implements IUtilisateurDAO {
 	@Override
 	public Utilisateur trouver(int id) {
 
+		Utilisateur	utilisateur = new Utilisateur();
 		try {
 			ps = con.prepareStatement(ISQLConstant.RETOURNER_UTILISATEUR_ById);
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
-			utilisateur = new Utilisateur();
 			if (rs.next()) {
 				utilisateur.setUtilisateurId(rs.getInt(1));
 				utilisateur.setNomComplet(rs.getString(2));

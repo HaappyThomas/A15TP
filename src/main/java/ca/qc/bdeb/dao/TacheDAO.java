@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ca.qc.bdeb.models.Tache;
@@ -13,30 +16,31 @@ import ca.qc.bdeb.models.Utilisateur;
 
 public class TacheDAO implements ITacheDAO {
 
-	private Tache tache;
 	private PreparedStatement ps = null;
+	private ResultSet rs = null;
 
 	// Connexion a la BDD
-//	ConnectionAlwaysData connection = new ConnectionAlwaysData();
 	Connection con = ConnectionAlwaysData.getInstance();
 
 	// Une méthode pour retourner une tâche après son ajout dans la base de données
 	// (les données d’une tâche sont des paramètres de cette méthode)
-
 	@Override
 	public Tache ajouter(Tache tache) {
 		try {
-			ps = con.prepareStatement(ISQLConstant.INSERT_TACHE);
+			ps = con.prepareStatement(ISQLConstant.INSERT_TACHE, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, tache.getDescription());
-			// ps.set(2, tache.getDatetime());
+			ps.setObject(2, tache.getDatetime());
 			ps.setInt(3, tache.getDuree());
 			ps.setInt(4, tache.getUtilisateurId());
-
 			int nbr = ps.executeUpdate();
-			tache = new Tache();
+			// recuperer tacheId generé automatiquement dans DB
+			rs = ps.getGeneratedKeys();
 			if (nbr > 0) {
+				// positionner cursor à premiere ligne
+				rs.next();
+				// set tacheId pour tache
+				tache.setTacheId(rs.getInt(1));
 				System.out.println("La tache a été inseré");
-
 			} else {
 				System.out.println("Operation echouée");
 			}
@@ -51,14 +55,13 @@ public class TacheDAO implements ITacheDAO {
 	// Une méthode pour retourner une tâche (l’identifiant est un paramètre de cette
 	// méthode)
 	@Override
-//	public Tache trouver(Integer idTache) throws SQLException {
 	public Tache trouver(Integer idTache) {
+		Tache tache = new Tache();
 		try {
 			ps = con.prepareStatement(ISQLConstant.RETOURNER_TACHE_ById);
 			ps.setInt(1, idTache);
 
-			ResultSet rs = ps.executeQuery();
-			tache = new Tache();
+			rs = ps.executeQuery();
 			if (rs.next()) {
 				tache.setTacheId(rs.getInt(1));
 				tache.setDescription(rs.getString(2));
@@ -71,7 +74,6 @@ public class TacheDAO implements ITacheDAO {
 			e.printStackTrace();
 		}
 		return tache;
-
 	}
 
 	// Une méthode pour retourner toutes les tâches d’un utilisateur donnée
@@ -107,19 +109,21 @@ public class TacheDAO implements ITacheDAO {
 	// données (l’identifiant est un paramètre de cette méthode)
 	@Override
 	public Tache supprimer(Integer idTache) {
+		Tache tache = new Tache();
 		try {
 			ps = con.prepareStatement(ISQLConstant.DELETE_TACHE);
 			ps.setInt(1, idTache);
+			
+			// recuperer tache à supprimer par idTache
 			ResultSet rs = ps.executeQuery("SELECT * FROM TbL_Tache WHERE TacheID = " + idTache);
 			if (rs.next()) {
-				Tache tache = new Tache();
 				tache.setTacheId(rs.getInt(1));
 				tache.setDescription(rs.getString(2));
 				tache.setDatetime(rs.getDate(3).toLocalDate());
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
 
-				int nbr = ps.executeUpdate();
+				ps.executeUpdate();
 
 			}
 		} catch (SQLException e) {
