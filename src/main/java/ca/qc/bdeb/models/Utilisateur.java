@@ -37,9 +37,5 @@ public class Utilisateur {
 	public String toString() {
 		return "Utilisateur [utilisateurId=" + utilisateurId + ", nomComplet=" + nomComplet + "]" + "\n";
 	}
-	
-	
-	
-	
 
 }

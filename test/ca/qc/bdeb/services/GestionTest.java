@@ -2,8 +2,6 @@ package ca.qc.bdeb.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.Connection;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,14 +12,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 
-import ca.qc.bdeb.dao.ConnectionAlwaysData;
 import ca.qc.bdeb.dao.TacheDAO;
 import ca.qc.bdeb.dao.UtilisateurDAO;
 import ca.qc.bdeb.models.Tache;
 
 public class GestionTest {
 	
-	private	Connection connection = ConnectionAlwaysData.getInstance();
 	private Gestion gestion = new Gestion();
 	
 	private UtilisateurDAO utilisateurDao = new UtilisateurDAO();

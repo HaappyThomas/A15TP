@@ -1,21 +1,14 @@
 package ca.qc.bdeb.dao;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ca.qc.bdeb.models.Tache;
-import ca.qc.bdeb.models.Utilisateur;
 
 public class TacheDAO implements ITacheDAO {
 
@@ -91,7 +84,7 @@ public class TacheDAO implements ITacheDAO {
 	// suppression de la
 	@Override
 	public List<Tache> trouverTachesDuUtilisateur(Integer idUtilisateur) {
-		List<Tache> listing = new ArrayList();
+		List<Tache> listing = new ArrayList<>();
 		try {
 			ps = con.prepareStatement(ISQLConstant.SELECT_TACHES_UTILISATEUR);
 			ps.setInt(1, idUtilisateur);
