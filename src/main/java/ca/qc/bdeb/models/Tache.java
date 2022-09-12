@@ -27,6 +27,13 @@ public class Tache {
 		this.duree = duree;
 		this.utilisateurId = utilisateurId;
 	}
+	public Tache( String description, LocalDate datetime, int duree, int utilisateurId) {
+		
+		this.description = description;
+		this.datetime = datetime;
+		this.duree = duree;
+		this.utilisateurId = utilisateurId;
+	}
 
 	public int getTacheId() {
 		return tacheId;
