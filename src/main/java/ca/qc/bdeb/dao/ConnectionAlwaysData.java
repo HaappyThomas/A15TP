@@ -18,8 +18,9 @@ public class  ConnectionAlwaysData {
 
 	ConnectionAlwaysData() {
 		try {
+			Class.forName("com.mysql.jdbc.Driver");		
 			connect = DriverManager.getConnection(url, user, pwd);
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
