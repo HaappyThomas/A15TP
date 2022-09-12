@@ -14,4 +14,6 @@ public class ISQLConstant {
     static final String DELETE_TACHE = "DELETE  FROM TbL_Tache WHERE TacheID like ?";
     static final String DELETE_ALL_TACHE = "DELETE  FROM TbL_Tache WHERE TacheID > 0";
     static final String DELETE_ALL_UTILISATEUR = "DELETE  FROM TbL_Utilisateur WHERE UtilisateurID > 0";
+    static final String FIND_ALL_UTILISATEUR = "SELECT *  FROM TbL_Utilisateur";
+    static final String FIND_ALL_TACHE= "SELECT *  FROM TbL_Tache";
 }

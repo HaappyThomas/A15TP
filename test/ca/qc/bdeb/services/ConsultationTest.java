@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.jupiter.api.*;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.*;
 import ca.qc.bdeb.dao.TacheDAO;
 import ca.qc.bdeb.dao.UtilisateurDAO;
 import ca.qc.bdeb.models.Tache;
+import ca.qc.bdeb.models.Utilisateur;
 
 @DisplayName("Test case for class Consultation")
 public class ConsultationTest {
@@ -207,4 +210,68 @@ public class ConsultationTest {
 		// assert 
 		assertTrue(consultation.voirTaches(uidNonExistant).isEmpty());
 	}
+	
+	/* **********************************************
+	 * ****** 4: to test method voirTousUtilisateur() ********
+	 * **********************************************
+	 */
+	@Order(8)
+//	@Disabled
+	@Test
+	@DisplayName("test method voirUtilisateur()")
+	public void voirTousUtilisateur() {
+		// ajouter test data: utilisateur
+		uid1 = utilisateurDao.ajouter("Alain Flou").getUtilisateurId();
+		uid2 = utilisateurDao.ajouter("Annie Clair").getUtilisateurId();
+		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
+		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
+
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		List<Utilisateur> utilisateurs = new ArrayList<>();
+		utilisateurs = consultation.voirTousUtilisateur();
+		System.out.println("8");
+		System.out.println(utilisateurs);
+		
+		// assert
+		assertEquals("Alain Flou", utilisateurs.get(0).getNomComplet());
+		assertEquals("Annie Clair", utilisateurs.get(1).getNomComplet());
+		assertEquals("Fannie Cossette", utilisateurs.get(2).getNomComplet());
+		assertEquals("Luis Bessette", utilisateurs.get(3).getNomComplet());
+	}
+		
+	/* **********************************************
+	 * ****** 5: to test method voirTousTaches() ********
+	 * **********************************************
+	 */
+	@Order(9)
+//	@Disabled
+	@Test
+	@DisplayName("test method voirTousTaches()")
+	public void voirTousTaches() {
+		// ajouter test data: utilisateur
+		uid1 = utilisateurDao.ajouter("Alain Flou").getUtilisateurId();
+		uid2 = utilisateurDao.ajouter("Annie Clair").getUtilisateurId();
+		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
+		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
+		// ajouter test data: tache
+		tacheId1 = tacheDao.ajouter(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = tacheDao.ajouter(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+		tacheId3 = tacheDao.ajouter(new Tache("C#", LocalDateTime.of(2022, 9, 12, 8, 30), 3, uid2)).getTacheId();
+		tacheId4 = tacheDao.ajouter(new Tache("Angular", LocalDateTime.of(2022, 9, 12, 13, 00), 3, uid2)).getTacheId();
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		List<Tache> taches = new ArrayList<>();
+		taches = consultation.voirTousTaches();
+		System.out.println("9");
+		System.out.println(taches);
+		
+		// assert
+		assertEquals("Java", taches.get(0).getDescription());
+		assertEquals("Nodejs", taches.get(1).getDescription());
+		assertEquals("C#", taches.get(2).getDescription());
+		assertEquals("Angular", taches.get(3).getDescription());
+	}
+	
+	
+	
+	
 }

@@ -30,6 +30,18 @@ public class Consultation {
 		return new UtilisateurDAO().trouver(id);
 	}
 
+	/**
+	 * find all utilisateurs
+	 * chercher tous les utlisateurs
+	 * @return
+	 */
+	@GET
+	@Path("/utilisateurs")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Utilisateur> voirTousUtilisateur() {
+		
+		return new UtilisateurDAO().findAll();
+	}
 	
 	/**
 	 * find tache by id
@@ -58,5 +70,19 @@ public class Consultation {
 		
 		return new TacheDAO().trouverTachesDuUtilisateur(idUtilisateur);
 	}
+	
+	/**
+	 * find all taches
+	 * chercher toutes les taches
+	 * @return
+	 */
+	@GET
+	@Path("/taches")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Tache> voirTousTaches() {
+		
+		return new TacheDAO().findAll();
+	}
+
 	
 }

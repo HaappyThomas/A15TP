@@ -86,4 +86,24 @@ public class UtilisateurDAO implements IUtilisateurDAO {
 		
 		return rows;
 	}
+	
+	// find all utilisateurs
+	public List<Utilisateur> findAll(){
+		List<Utilisateur> utilisateurs = new ArrayList<>();
+		try {
+			ps = con.prepareStatement(ISQLConstant.FIND_ALL_UTILISATEUR);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Utilisateur utilisateur = new Utilisateur();
+				utilisateur.setUtilisateurId(rs.getInt(1));
+				utilisateur.setNomComplet(rs.getString(2));
+				utilisateurs.add(utilisateur);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return utilisateurs;
+	}
 }

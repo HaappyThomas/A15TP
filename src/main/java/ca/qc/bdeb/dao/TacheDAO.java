@@ -70,9 +70,10 @@ public class TacheDAO implements ITacheDAO {
 				tache.setDescription(rs.getString(2));
 
 				//changer SQL datetime au LocalDateTime
-				Date timestamp = rs.getTimestamp(3);
-				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-				tache.setDatetime(localDateTime);
+//				Date timestamp = rs.getTimestamp(3);
+//				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+//				tache.setDatetime(localDateTime);
+				tache.setDatetime(rs.getTimestamp(3).toLocalDateTime());
 
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
@@ -101,9 +102,10 @@ public class TacheDAO implements ITacheDAO {
 				tache.setDescription(rs.getString(2));
 
 				// changer SQL datetime au LocalDateTime
-				Date timestamp = rs.getTimestamp(3);
-				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-				tache.setDatetime(localDateTime);
+//				Date timestamp = rs.getTimestamp(3);
+//				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+//				tache.setDatetime(localDateTime);
+				tache.setDatetime(rs.getTimestamp(3).toLocalDateTime());
 				
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
@@ -134,9 +136,10 @@ public class TacheDAO implements ITacheDAO {
 				tache.setDescription(rs.getString(2));
 				
 				// changer SQL datetime au LocalDateTime
-				Date timestamp = rs.getTimestamp(3);
-				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-				tache.setDatetime(localDateTime);
+//				Date timestamp = rs.getTimestamp(3);
+//				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+//				tache.setDatetime(localDateTime);
+				tache.setDatetime(rs.getTimestamp(3).toLocalDateTime());
 				
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
@@ -164,7 +167,30 @@ public class TacheDAO implements ITacheDAO {
 		}
 		
 		return rows;
-		
+	}
+	
+	// find all tahces
+	public List<Tache> findAll(){
+		List<Tache> taches = new ArrayList<>();
+		try {
+			ps = con.prepareStatement(ISQLConstant.FIND_ALL_TACHE);
+
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Tache tache = new Tache();
+				tache.setTacheId(rs.getInt(1));
+				tache.setDescription(rs.getString(2));
+				tache.setDatetime(rs.getTimestamp(3).toLocalDateTime());
+				tache.setDuree(rs.getInt(4));
+				tache.setUtilisateurId(rs.getInt(5));
+				taches.add(tache);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return taches; 
 	}
 
 }
