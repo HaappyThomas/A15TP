@@ -11,7 +11,6 @@ import java.util.List;
 import ca.qc.bdeb.models.Tache;
 
 public class TacheDAO implements ITacheDAO {
-<<<<<<< HEAD
 
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
@@ -45,28 +44,6 @@ public class TacheDAO implements ITacheDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-=======
-	
-	private Tache tache;
-    private PreparedStatement ps = null;
-    
-    
-    //Connexion a la BDD
-    ConnectionAlwaysData connection = new ConnectionAlwaysData();
-	Connection con = connection.getInstance();
-	
-	//Une méthode pour retourner une tâche après son ajout dans la base de données
-	//(les données d’une tâche sont des paramètres de cette méthode) 
-	@Override
-	public Tache ajouter(Tache tache) throws SQLException {
-		
-		
-		ps = con.prepareStatement(ISQLConstant.INSERT_TACHE);
-		ps.setString(1, tache.getDescription());
-		ps.setString(2, tache.getDatetime().toString());
-		ps.setInt(3, tache.getDuree());
-		ps.setInt(4, tache.getUtilisateurId());
->>>>>>> d4c1006eaea72f29f874b03c97642f8c3e22484a
 
 		return tache;
 	}
