@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +68,12 @@ public class TacheDAO implements ITacheDAO {
 			if (rs.next()) {
 				tache.setTacheId(rs.getInt(1));
 				tache.setDescription(rs.getString(2));
-				tache.setDatetime(rs.getDate(3).toLocalDate());
+
+				//changer SQL datetime au LocalDateTime
+				Date timestamp = rs.getTimestamp(3);
+				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				tache.setDatetime(localDateTime);
+
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
 			}
@@ -91,7 +99,12 @@ public class TacheDAO implements ITacheDAO {
 				Tache tache = new Tache();
 				tache.setTacheId(rs.getInt(1));
 				tache.setDescription(rs.getString(2));
-				tache.setDatetime(rs.getDate(3).toLocalDate());
+
+				// changer SQL datetime au LocalDateTime
+				Date timestamp = rs.getTimestamp(3);
+				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				tache.setDatetime(localDateTime);
+				
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
 
@@ -119,7 +132,12 @@ public class TacheDAO implements ITacheDAO {
 			if (rs.next()) {
 				tache.setTacheId(rs.getInt(1));
 				tache.setDescription(rs.getString(2));
-				tache.setDatetime(rs.getDate(3).toLocalDate());
+				
+				// changer SQL datetime au LocalDateTime
+				Date timestamp = rs.getTimestamp(3);
+				LocalDateTime localDateTime = timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				tache.setDatetime(localDateTime);
+				
 				tache.setDuree(rs.getInt(4));
 				tache.setUtilisateurId(rs.getInt(5));
 
@@ -132,6 +150,21 @@ public class TacheDAO implements ITacheDAO {
 		}
 
 		return tache;
+	}
+	
+	// delete all taches
+	public int supprimerTousTaches() {
+		int rows = 0;
+		try {
+			ps = con.prepareStatement(ISQLConstant.DELETE_ALL_TACHE);
+			rows = ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return rows;
+		
 	}
 
 }

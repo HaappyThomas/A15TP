@@ -5,14 +5,14 @@ import java.time.*;
 public class Tache {
 	private int tacheId;
 	private String description;
-	private LocalDate datetime;
+	private LocalDateTime datetime;
 	private int duree;
 	private int utilisateurId;
 	
 	public Tache() {
 	}
 	
-	public Tache(String description, LocalDate datetime, int duree, int utilisateurId) {
+	public Tache(String description, LocalDateTime datetime, int duree, int utilisateurId) {
 		this.description = description;
 		this.datetime = datetime;
 		this.duree = duree;
@@ -20,7 +20,7 @@ public class Tache {
 	}
 
 
-	public Tache(int tacheId, String description, LocalDate datetime, int duree, int utilisateurId) {
+	public Tache(int tacheId, String description, LocalDateTime datetime, int duree, int utilisateurId) {
 		this.tacheId = tacheId;
 		this.description = description;
 		this.datetime = datetime;
@@ -44,11 +44,11 @@ public class Tache {
 		this.description = description;
 	}
 
-	public LocalDate getDatetime() {
+	public LocalDateTime getDatetime() {
 		return datetime;
 	}
 
-	public void setDatetime(LocalDate datetime) {
+	public void setDatetime(LocalDateTime datetime) {
 		this.datetime = datetime;
 	}
 

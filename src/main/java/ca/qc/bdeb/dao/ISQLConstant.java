@@ -12,4 +12,6 @@ public class ISQLConstant {
 													+ "FROM TbL_Utilisateur JOIN TbL_Tache tache ON TbL_Utilisateur.UtilisateurID = tache.UtilisateurID "
 													+ "WHERE TbL_Utilisateur.UtilisateurID = ?";
     static final String DELETE_TACHE = "DELETE  FROM TbL_Tache WHERE TacheID like ?";
+    static final String DELETE_ALL_TACHE = "DELETE  FROM TbL_Tache WHERE TacheID > 0";
+    static final String DELETE_ALL_UTILISATEUR = "DELETE  FROM TbL_Utilisateur WHERE UtilisateurID > 0";
 }

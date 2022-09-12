@@ -71,4 +71,19 @@ public class UtilisateurDAO implements IUtilisateurDAO {
 		return utilisateur;
 	}
 
+	// delete all utilisateurs
+	public int supprimerTousUtilisateurs() {
+		int rows = 0;
+		try {
+			ps = con.prepareStatement(ISQLConstant.DELETE_ALL_TACHE);
+			ps.executeUpdate();
+			ps = con.prepareStatement(ISQLConstant.DELETE_ALL_UTILISATEUR);
+			rows = ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return rows;
+	}
 }

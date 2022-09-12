@@ -1,21 +1,38 @@
 package ca.qc.bdeb.services;
 
+import static org.junit.Assert.assertEquals;
+
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.jupiter.api.*;
+
+import ca.qc.bdeb.dao.TacheDAO;
+import ca.qc.bdeb.dao.UtilisateurDAO;
+import ca.qc.bdeb.models.Tache;
 
 @DisplayName("Test case for class Consultation")
 public class ConsultationTest {
 	
-	// todo 标准做法 加入测试数据，测试结束删除数据，保证数据库中没有残留数据
+	private Consultation consultation = new Consultation();
 	
+	private UtilisateurDAO utilisateurDao = new UtilisateurDAO();
+	private TacheDAO tacheDao = new TacheDAO();
+	private int uid1, uid2, uid3, uid4;
+	private int tacheId1, tacheId2, tacheId3, tacheId4;
+	private int uidNonExistant = 0;
+	private int tacheIdNonExistant = 0;
+	
+	// ajouter test data
 	@BeforeEach
 	void setUp() {
-		// todo: ajouter test data
 	}
 	
+	// supprimer test data
 	@AfterEach
 	void tearDown() {
-		// todo: delete test data
+		// delete test data
+		utilisateurDao.supprimerTousUtilisateurs();
 	}
 	
 	
@@ -26,24 +43,43 @@ public class ConsultationTest {
 	 */
 	//// 1.1: test utilisateur existant
 	@Order(1)
-	@Disabled
+//	@Disabled
 	@Test
 	@DisplayName("test method voirUtilisateur() en cas de utilisateur existe")
 	public void voirUtilisateurExistant() {
+		// ajouter test data: utilisateur
+		uid1 = utilisateurDao.ajouter("Alain Flou").getUtilisateurId();
+		uid2 = utilisateurDao.ajouter("Annie Clair").getUtilisateurId();
+		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
+		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
+
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
 		System.out.println("1.1");
-		System.out.println(new Consultation().voirUtilisateur(3));
+		System.out.println(consultation.voirUtilisateur(uid1));
+		System.out.println(consultation.voirUtilisateur(uid2));
+		System.out.println(consultation.voirUtilisateur(uid3));
+		System.out.println(consultation.voirUtilisateur(uid4));
 		
-		// todo 比较预期结果和真实的返回结果
+		// assert
+		assertEquals("Alain Flou", consultation.voirUtilisateur(uid1).getNomComplet());
+		assertEquals("Annie Clair", consultation.voirUtilisateur(uid2).getNomComplet());
+		assertEquals("Fannie Cossette", consultation.voirUtilisateur(uid3).getNomComplet());
+		assertEquals("Luis Bessette", consultation.voirUtilisateur(uid4).getNomComplet());
 	}
+	
 	
 	//// 1.2: test utlisateur non-existant
 	@Order(2)
-	@Disabled
+//	@Disabled
 	@Test
 	@DisplayName("test method voirUtilisateur() en cas de utilisateur n'existe pas")
 	public void voirUtilisateurNonExistant() {
+		// afficher les utilisateurs non existants ajoutees pour plus facile a verifier manullement
 		System.out.println("1.2");
-		System.out.println(new Consultation().voirUtilisateur(0));
+		System.out.println(consultation.voirUtilisateur(uidNonExistant));
+
+		// assert
+		assertEquals(null, consultation.voirUtilisateur(uidNonExistant).getNomComplet());
 	}
 
 	
@@ -53,25 +89,47 @@ public class ConsultationTest {
 	 */
 	//// 2.1: test tache existant
 	@Order(3)
-	@Disabled
+//	@Disabled
 	@Test
 	@DisplayName("test method voirTache() en cas de tache existe")
 	public void voirTacheExistant() {
+		// ajouter des utilisateurs a l'avance parce que la tache a besoin de utilisateurId
+		uid1 = utilisateurDao.ajouter("Alain Flou").getUtilisateurId();
+		uid2 = utilisateurDao.ajouter("Annie Clair").getUtilisateurId();
+		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
+		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
+		// ajouter test data: tache
+		tacheId1 = tacheDao.ajouter(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = tacheDao.ajouter(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+		tacheId3 = tacheDao.ajouter(new Tache("C#", LocalDateTime.of(2022, 9, 12, 8, 30), 3, uid2)).getTacheId();
+		tacheId4 = tacheDao.ajouter(new Tache("Angular", LocalDateTime.of(2022, 9, 12, 13, 00), 3, uid2)).getTacheId();
 
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
 		System.out.println("2.1");
-		System.out.println(new Consultation().voirTache(5));
+		System.out.println(consultation.voirTache(tacheId1));
+		System.out.println(consultation.voirTache(tacheId2));
+		System.out.println(consultation.voirTache(tacheId3));
+		System.out.println(consultation.voirTache(tacheId4));
 		
-		// todo 比较预期结果和真实的返回结果
+		// assert 
+		assertEquals("Java", consultation.voirTache(tacheId1).getDescription());
+		assertEquals("Nodejs", consultation.voirTache(tacheId2).getDescription());
+		assertEquals("C#", consultation.voirTache(tacheId3).getDescription());
+		assertEquals("Angular", consultation.voirTache(tacheId4).getDescription());
 	}
 	
 	//// 2.2: test tache non-existant
 	@Order(4)
-	@Disabled
+//	@Disabled
 	@Test
 	@DisplayName("test method voirTache() en cas de tache n'existe pas")
 	public void voirTacheNonExistant() {
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
 		System.out.println("2.2");
-		System.out.println(new Consultation().voirTache(0));
+		System.out.println(consultation.voirTache(tacheIdNonExistant));
+
+		// assert 
+		assertEquals(null,consultation.voirTache(tacheIdNonExistant).getDescription());
 	}
 
 	
@@ -81,38 +139,72 @@ public class ConsultationTest {
 	 */
 	//// 3.1: test utilisateur existant et il a des taches
 	@Order(5)
-	@Disabled("true")
+//	@Disabled
 	@Test
-	@DisplayName("test method voirTaches() en cas de l'unilisateur existant")
+	@DisplayName("test method voirTaches() en cas de l'unilisateur existant et il a des taches")
 	public void voirTachesEnCasDeUtilisateurExistantEtAyantTaches() {
 
-		System.out.println("3.1");
-		System.out.println(new Consultation().voirTaches(4));
+		// ajouter test data: utilisateur
+		uid1 = utilisateurDao.ajouter("Alain Flou").getUtilisateurId();
+		uid2 = utilisateurDao.ajouter("Annie Clair").getUtilisateurId();
+		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
+		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
+		// ajouter test data: tache
+		tacheId1 = tacheDao.ajouter(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = tacheDao.ajouter(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+		tacheId3 = tacheDao.ajouter(new Tache("C#", LocalDateTime.of(2022, 9, 12, 8, 30), 3, uid2)).getTacheId();
+		tacheId4 = tacheDao.ajouter(new Tache("Angular", LocalDateTime.of(2022, 9, 12, 13, 00), 3, uid2)).getTacheId();
 		
-		// todo 比较预期结果和真实的返回结果
+		// afficher les taches non existants ajoutees pour plus facile a verifier manullement
+		System.out.println("3.1");
+		System.out.println(consultation.voirTaches(uid1));
+		System.out.println(consultation.voirTaches(uid2));
+		
+		// assert 
+		assertEquals(2,consultation.voirTaches(uid1).size());
+		assertEquals(2,consultation.voirTaches(uid2).size());
+
 	}
 	
 	//// 3.2: test utilisateur existant et il n'a pas de taches
 	@Order(6)
-	@Disabled
+//	@Disabled
 	@Test
-	@DisplayName("test method voirTaches() en cas de l'unilisateur existant")
+	@DisplayName("test method voirTaches() en cas de l'unilisateur existant mais il n'a pas de tahce")
 	public void voirTachesEnCasDeUtilisateurExistantEtNonTaches() {
 
-		System.out.println("3.2");
-		System.out.println(new Consultation().voirTaches(5));
+		// ajouter test data: utilisateur
+		uid1 = utilisateurDao.ajouter("Alain Flou").getUtilisateurId();
+		uid2 = utilisateurDao.ajouter("Annie Clair").getUtilisateurId();
+		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
+		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
+		// ajouter test data: tache
+		tacheId1 = tacheDao.ajouter(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = tacheDao.ajouter(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+		tacheId3 = tacheDao.ajouter(new Tache("C#", LocalDateTime.of(2022, 9, 12, 8, 30), 3, uid2)).getTacheId();
+		tacheId4 = tacheDao.ajouter(new Tache("Angular", LocalDateTime.of(2022, 9, 12, 13, 00), 3, uid2)).getTacheId();
 		
-		// todo 比较预期结果和真实的返回结果
+		// afficher les taches non existants ajoutees pour plus facile a verifier manullement
+		System.out.println("3.2");
+		System.out.println(consultation.voirTaches(uid3));
+		System.out.println(consultation.voirTaches(uid4));;
+		
+		// assert 
+		assertEquals(0, consultation.voirTaches(uid3).size());
+		assertEquals(0, consultation.voirTaches(uid3).size());
 	}
 	
 	//// 3.3: test utilisateur non-existant
 	@Order(7)
-	@Disabled
+//	@Disabled
 	@Test
 	@DisplayName("test method voirTache() en cas de utilisateur n'existe pas")
 	public void voirTachesEnCasDeUtilisateurNonExistant() {
 		
+		// afficher les taches non existants ajoutees pour plus facile a verifier manullement
 		System.out.println("3.3");
-		System.out.println(new Consultation().voirTaches(0));
+		System.out.println(consultation.voirTaches(uidNonExistant));
+		// assert 
+		assertEquals(0, consultation.voirTaches(uidNonExistant).size());
 	}
 }
