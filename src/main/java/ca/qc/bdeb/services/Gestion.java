@@ -57,7 +57,7 @@ public class Gestion {
 		
 		// trouver toutes les taches de cet utilisateur
 		List<Tache> tachesExistantes = tacheDao.trouverTachesDuUtilisateur(tache.getUtilisateurId());
-		// todo
+		// verifier si l'on peut ajouter la nouvelle tache 
 		if(!tachesExistantes.isEmpty()) {
 			for(Tache item: tachesExistantes){
 				itemLocalTimeBegin= item.getDatetime().toLocalTime();
@@ -79,7 +79,6 @@ public class Gestion {
 		}else {
 			tacheDao.ajouter(tache);
 		}
-		
 
 		return resultat;
 	}
@@ -89,9 +88,17 @@ public class Gestion {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String ajouterTacheV3(Tache tache, @PathParam("nbRepetition") Integer nbRepetition) {
-		String resultat = "Attention! Operation non executee";
-		// todo
+//		String resultat = "Attention! Operation non executee";
+		String resultat = "Toutes les taches sont été inserées";
+		TacheDAO tacheDao = new TacheDAO();
+		int step = 0;
 		
+		// on ajouter les taches sans verifier
+		for(int i = 0; i < nbRepetition; i++) {
+			tache.setDatetime(tache.getDatetime().plusDays(step));
+			tacheDao.ajouter(tache);
+			step = 7;
+		}
 		
 		return resultat;
 	}

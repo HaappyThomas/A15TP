@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -309,5 +310,38 @@ public class GestionTest {
 		// assert
 		assertEquals("L'horaire d'une tache existante", resultat);
 	}	
+	
+	/*
+	 * *************************************************************
+	 * ************** 5:to test method ajouterTacheV2() ***********
+	 * ************************************************************* 
+	 */
+	@Test
+	@Order(11)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 en tache conflit avec valeur frontaliere l'autre cote")
+	public void ajouterTacheV3SansConflit() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter la nouvelle tache: Heure de conduire 2022-4-25 15:00-16:00
+		String resultat = gestion.ajouterTacheV3(new Tache("Hebernate", LocalDateTime.of(2022, 4, 25, 15, 00), 1, uid1), 4);
+		
+		List<Tache> taches = new Consultation().voirTaches(uid1);
+		LocalDateTime localDateTime = LocalDateTime.of(2022, 04, 25, 15, 00);
+
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("5.1");
+		System.out.println(resultat);
+		System.out.println(taches);
+		
+		// assert
+		assertEquals("Toutes les taches sont été inserées", resultat);
+
+		assertEquals(localDateTime, taches.get(0).getDatetime());
+		assertEquals(localDateTime.plusDays(7), taches.get(1).getDatetime());
+		assertEquals(localDateTime.plusDays(14), taches.get(2).getDatetime());
+		assertEquals(localDateTime.plusDays(21), taches.get(3).getDatetime());
+	}
 	
 }
