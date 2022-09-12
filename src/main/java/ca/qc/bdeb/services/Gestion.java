@@ -1,5 +1,8 @@
 package ca.qc.bdeb.services;
 
+import java.time.LocalTime;
+import java.util.List;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -44,9 +47,40 @@ public class Gestion {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String ajouterTacheV2(Tache tache) {
-		String resultat = "L'horaire d'une tache existante";
-		// todo
+		String resultat = "La tache a été inseré";
+		TacheDAO tacheDao = new TacheDAO();
+		LocalTime tacheLocalTimeBegin = tache.getDatetime().toLocalTime();
+		LocalTime tacheLocalTimeEnd = tache.getDatetime().toLocalTime().plusHours(tache.getDuree());
+
+		LocalTime itemLocalTimeBegin;
+		LocalTime itemLocalTimeEnd;
 		
+		// trouver toutes les taches de cet utilisateur
+		List<Tache> tachesExistantes = tacheDao.trouverTachesDuUtilisateur(tache.getUtilisateurId());
+		// todo
+		if(!tachesExistantes.isEmpty()) {
+			for(Tache item: tachesExistantes){
+				itemLocalTimeBegin= item.getDatetime().toLocalTime();
+				itemLocalTimeEnd = item.getDatetime().toLocalTime().plusHours(item.getDuree());
+				
+				// afficher pour debug
+				System.out.println("tacheLocalTimeBegin: " + tacheLocalTimeBegin);
+				System.out.println("tacheLocalTimeEnd: " + tacheLocalTimeEnd);
+				System.out.println("itemLocalTimeBegin: " + itemLocalTimeBegin);
+				System.out.println("itemLocalTimeEnd: " + itemLocalTimeEnd);
+				
+				if(tacheLocalTimeBegin.isBefore(itemLocalTimeEnd)
+						&& tacheLocalTimeEnd.isAfter(itemLocalTimeBegin)) {
+					resultat = "L'horaire d'une tache existante";
+					return resultat;
+				}
+			}
+			tacheDao.ajouter(tache);
+		}else {
+			tacheDao.ajouter(tache);
+		}
+		
+
 		return resultat;
 	}
 	

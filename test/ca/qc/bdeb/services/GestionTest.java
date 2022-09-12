@@ -40,15 +40,16 @@ public class GestionTest {
 		utilisateurDao.supprimerTousUtilisateurs();
 	}
 	
+
 	/*
 	 * *************************************************************
 	 * ************** 1:to test method ajouterUtilisateur() ***********
 	 * ************************************************************* 
 	 */
 	//// 
+	@Test
 	@Order(1)
 	@Disabled
-	@Test
 	@DisplayName("test method ajouterUtilisateur()")
 	public void ajouterUtilisateur() {
 		
@@ -78,9 +79,9 @@ public class GestionTest {
 	 * ************************************************************* 
 	 */
 	//// 
+	@Test
 	@Order(2)
 	@Disabled
-	@Test
 	@DisplayName("test method ajouterTache()")
 	public void ajouterTache() {
 
@@ -116,9 +117,9 @@ public class GestionTest {
 	 * ************************************************************* 
 	 */
 	//// 
+	@Test
 	@Order(3)
 	@Disabled
-	@Test
 	@DisplayName("test method supprimerTache()")
 	public void supprimerTache() {
 		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
@@ -144,11 +145,169 @@ public class GestionTest {
 		// assert
 		assertEquals("Java", tacheSupprime.getDescription());
 		assertEquals(null, tacheDao.trouver(tacheId1).getDescription());
-		
 	}
 	
+	/*
+	 * *************************************************************
+	 * ************** 4:to test method ajouterTacheV2() ***********
+	 * ************************************************************* 
+	 */
+	@Test
+	@Order(4)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 sans taches existantes")
+	public void ajouterTacheV2SansTachesExistantes() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches
+		String resultat = gestion.ajouterTacheV2(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.1");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("La tache a été inseré", resultat);
+	}
+	
+	@Test
+	@Order(5)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 sans tache conflit avec des valeurs limites")
+	public void ajouterTacheV2SansTachesConflit() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches deja existent: tache Java 8:00-11:30 et Nodejs 13:00-16:00
+		tacheId1 = gestion.ajouterTache(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 00), 3, uid1)).getTacheId();
+		tacheId2 = gestion.ajouterTache(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+
+		// ajouter la nouvelle tache: Hibernate 2022-09-11 11:00-13:00 avec value limites
+		String resultat = gestion.ajouterTacheV2(new Tache("Hebernate", LocalDateTime.of(2022, 9, 11, 11, 00), 2, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.2");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("La tache a été inseré", resultat);
+	}	
+	
+	@Test
+	@Order(6)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 sans tache conflit avec des valeurs frontalieres")
+	public void ajouterTacheV2SansTachesConflitValeurFrontaliere() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches deja existent: tache Java 8:00-11:30 et Nodejs 13:00-16:00
+		tacheId1 = gestion.ajouterTache(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 00), 3, uid1)).getTacheId();
+		tacheId2 = gestion.ajouterTache(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+
+		// ajouter la nouvelle tache: Hibernate 2022-09-11 11:01-12:01 avec value limites
+		String resultat = gestion.ajouterTacheV2(new Tache("Hebernate", LocalDateTime.of(2022, 9, 11, 11, 01), 1, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.3");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("La tache a été inseré", resultat);
+	}	
 	
 	
+	@Test
+	@Order(7)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 en tache conflit avec valeur d'une cote")
+	public void ajouterTacheV2AvecTachesConflitValeurUneCote() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches deja existent: tache Java 8:30-11:30 et Nodejs 13:00-16:00
+		tacheId1 = gestion.ajouterTache(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = gestion.ajouterTache(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+
+		// ajouter la nouvelle tache: Hibernate 2022-09-11 10:40-11:40
+		String resultat = gestion.ajouterTacheV2(new Tache("Hebernate", LocalDateTime.of(2022, 9, 11, 10, 40), 1, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.4");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("L'horaire d'une tache existante", resultat);
+	}		
+
+	@Test
+	@Order(8)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 en tache conflit avec valeur de l'une cote")
+	public void ajouterTacheV2AvecTachesConflitValeurAutreCote() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches deja existent: tache Java 8:30-11:30 et Nodejs 13:00-16:00
+		tacheId1 = gestion.ajouterTache(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = gestion.ajouterTache(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
+
+		// ajouter la nouvelle tache: Hibernate 2022-09-11 11:40-13:40
+		String resultat = gestion.ajouterTacheV2(new Tache("Hebernate", LocalDateTime.of(2022, 9, 11, 11, 40), 2, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.5");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("L'horaire d'une tache existante", resultat);
+	}		
 	
+	@Test
+	@Order(9)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 en tache conflit avec valeur frontaliere une cote")
+	public void ajouterTacheV2AvecTachesConflitValeurFrontaliereUneCote() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches deja existent: tache Java 8:30-11:30 et Nodejs 13:00-16:00
+		tacheId1 = gestion.ajouterTache(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = gestion.ajouterTache(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 10, 59 ), 1, uid1)).getTacheId();
+
+		// ajouter la nouvelle tache: Hibernate 2022-09-11 11:40-13:40
+		String resultat = gestion.ajouterTacheV2(new Tache("Hebernate", LocalDateTime.of(2022, 9, 11, 11, 40), 2, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.6");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("L'horaire d'une tache existante", resultat);
+	}	
+	
+	@Test
+	@Order(10)
+	@Disabled
+	@DisplayName("test method ajouterTacheV2 en tache conflit avec valeur frontaliere l'autre cote")
+	public void ajouterTacheV2AvecTachesConflitValeurFrontaliereAutreCote() {
+		// ajouter les utilisateur a l'avance parce que les taches ont besoin utilisateurId
+		uid1 = gestion.ajouterUtilisateur("Alain Flou").getUtilisateurId();
+
+		// ajouter les taches deja existent: tache Java 8:30-11:30 et Nodejs 13:00-16:00
+		tacheId1 = gestion.ajouterTache(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
+		tacheId2 = gestion.ajouterTache(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 10, 59 ), 1, uid1)).getTacheId();
+
+		// ajouter la nouvelle tache: Hibernate 2022-09-11 11:01-13:01
+		String resultat = gestion.ajouterTacheV2(new Tache("Hebernate", LocalDateTime.of(2022, 9, 11, 11, 01), 2, uid1));
+		
+		// afficher les utilisateurs ajoutees pour plus facile a verifier manuellement
+		System.out.println("4.7");
+		System.out.println(resultat);
+		
+		// assert
+		assertEquals("L'horaire d'une tache existante", resultat);
+	}	
 	
 }

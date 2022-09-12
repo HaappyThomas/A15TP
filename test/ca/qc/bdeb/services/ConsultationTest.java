@@ -1,6 +1,7 @@
 package ca.qc.bdeb.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
 
@@ -74,7 +75,7 @@ public class ConsultationTest {
 	@Test
 	@DisplayName("test method voirUtilisateur() en cas de utilisateur n'existe pas")
 	public void voirUtilisateurNonExistant() {
-		// afficher les utilisateurs non existants ajoutees pour plus facile a verifier manullement
+		// afficher les utilisateurs non existants ajoutees pour plus facile a verifier manuellement
 		System.out.println("1.2");
 		System.out.println(consultation.voirUtilisateur(uidNonExistant));
 
@@ -190,8 +191,7 @@ public class ConsultationTest {
 		System.out.println(consultation.voirTaches(uid4));;
 		
 		// assert 
-		assertEquals(0, consultation.voirTaches(uid3).size());
-		assertEquals(0, consultation.voirTaches(uid3).size());
+		assertTrue(consultation.voirTaches(uid3).isEmpty());
 	}
 	
 	//// 3.3: test utilisateur non-existant
@@ -205,6 +205,6 @@ public class ConsultationTest {
 		System.out.println("3.3");
 		System.out.println(consultation.voirTaches(uidNonExistant));
 		// assert 
-		assertEquals(0, consultation.voirTaches(uidNonExistant).size());
+		assertTrue(consultation.voirTaches(uidNonExistant).isEmpty());
 	}
 }
