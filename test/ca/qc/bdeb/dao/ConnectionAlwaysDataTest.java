@@ -33,10 +33,10 @@ public class ConnectionAlwaysDataTest {
 		uid3 = utilisateurDao.ajouter("Fannie Cossette").getUtilisateurId();
 		uid4 = utilisateurDao.ajouter("Luis Bessette").getUtilisateurId();
 		// ajouter test data: tache
-		tacheId1 = tacheDao.ajouter(new Tache("Java", LocalDateTime.of(2022, 9, 11, 8, 30), 3, uid1)).getTacheId();
-		tacheId2 = tacheDao.ajouter(new Tache("Nodejs", LocalDateTime.of(2022, 9, 11, 13, 00 ), 3, uid1)).getTacheId();
-		tacheId3 = tacheDao.ajouter(new Tache("C#", LocalDateTime.of(2022, 9, 12, 8, 30), 3, uid2)).getTacheId();
-		tacheId4 = tacheDao.ajouter(new Tache("Angular", LocalDateTime.of(2022, 9, 12, 13, 00), 3, uid2)).getTacheId();
+		tacheId1 = tacheDao.ajouter(new Tache("Java", 		LocalDateTime.of(2022, 9, 11,  8, 30), 3, uid1)).getTacheId();
+		tacheId2 = tacheDao.ajouter(new Tache("Nodejs", 	LocalDateTime.of(2022, 9, 11, 13, 00), 3, uid1)).getTacheId();
+		tacheId3 = tacheDao.ajouter(new Tache("C#", 		LocalDateTime.of(2022, 9, 12,  8, 30), 3, uid2)).getTacheId();
+		tacheId4 = tacheDao.ajouter(new Tache("Angular", 	LocalDateTime.of(2022, 9, 12, 13, 00), 3, uid2)).getTacheId();
 	}
 	
 	// supprimer test data
