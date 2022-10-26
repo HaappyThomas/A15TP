@@ -1,5 +1,5 @@
 # A15TP
-This is the practical project for course A15 for Web Service API
+This is the practical project for RESTful API
 
 Objectif:
 
